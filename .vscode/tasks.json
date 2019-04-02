@@ -9,7 +9,7 @@
             "command": "ansible-galaxy install -r requirements.yml"
         },
         {
-            "label": "setup",
+            "label": "main",
             "type": "shell",
             "command": "ansible-playbook -b -i hosts -u debian main.yml",
             "problemMatcher": []
