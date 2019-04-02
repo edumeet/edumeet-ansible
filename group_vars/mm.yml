@@ -5,6 +5,6 @@ cert_domains:
   - terefere.lab.vvc.niif.hu
 cert_email: meszaros.mihaly@kifu.gov.hu
 unattended_email: meszaros.mihaly@kifu.gov.hu
-turn_uri: turn://ltc.turn.geant.org
+turn_uri: turn:ltc.turn.geant.org
 turn_user: user
 turn_password: password
