@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: mm
   roles:
   - role: jnv.unattended-upgrades
     become: yes
@@ -7,7 +7,7 @@
     - 'origin=Debian,codename=${distro_codename},label=Debian-Security' # security updates
     - 'o=Debian,codename=${distro_codename},label=Debian' # updates including non-security updates
     - 'o=Debian,codename=${distro_codename},a=proposed-updates'
-    unattended_mail: 'meszaros.mihaly@kifu.gov.hu'
+    unattended_mail: "{{ unattended_email }}"
 
   - role: geerlingguy.docker
     become: yes
@@ -16,22 +16,20 @@
     become: yes
     certbot_create_if_missing: true
     certbot_create_method: standalone
-    certbot_admin_email: meszaros.mihaly@kifu.gov.hu
+    certbot_admin_email: "{{ cert_email }}"
     # the role is dummy and needs anyway a service to stop, so I choosed: "ntp"
     certbot_create_standalone_stop_services: ntp
     certbot_certs:
-     - domains:
-         - mm.lab.vvc.niif.hu
-         - rtc.lab.vvc.niif.hu
-         - terefere.lab.vvc.niif.hu
+     - domains: "{{ cert_domains }}"
   tasks:
   - name: Replace domain
     lineinfile:
       path: /etc/hosts
       regexp: '^(.*)novalocal(.*)$'
-      line: '\1lab.vvc.niif.hu\2'
+      line: '\1{{ main_domain }}\2'
       backrefs: yes
 
+  # reload domain to ansible var
   - name: Setup
     setup:
 
@@ -70,6 +68,11 @@
     notify:
     - restart ferm
 
+  - name: cleanup mm directory
+    file:
+      state: absent
+      path: "mm"
+
   - name: git clone mm
     git:
       repo: 'https://github.com/misi/mm.git'
@@ -89,6 +92,36 @@
     copy:
       src: logo.svg
       dest: mm/logo/logo.svg
+
+  - name: Setup turnserver uri
+    lineinfile:
+      path: "{{ item }}"
+      backrefs: yes
+      regexp: "^(.*)turn:example.com:443?transport=tcp(.*)$"
+      line: '\1{{ turn_uri }}\2'
+    with_items:
+      - mm/configs/app/config.js
+      - mm/configs/server/config.js
+
+  - name: Setup turn user
+    lineinfile:
+      path: "{{ item }}"
+      backrefs: yes
+      regexp: "^(.*username.*)example(.*)$"
+      line: '\1{{ turn_user }}\2'
+    with_items:
+      - mm/configs/app/config.js
+      - mm/configs/server/config.js
+
+  - name: Setup turn password
+    lineinfile:
+      path: "{{ item }}"
+      backrefs: yes
+      regexp: "^(.*credential.*)example(.*)$"
+      line: '\1{{ turn_user }}\2'
+    with_items:
+      - mm/configs/app/config.js
+      - mm/configs/server/config.js
 
   - name: Run mm container
     become: yes
