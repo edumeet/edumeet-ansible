@@ -11,7 +11,7 @@
         {
             "label": "setup",
             "type": "shell",
-            "command": "ansible-playbook -b -i hosts -u debian setup.yml",
+            "command": "ansible-playbook -b -i hosts -u debian main.yml",
             "problemMatcher": []
         }
     ]
