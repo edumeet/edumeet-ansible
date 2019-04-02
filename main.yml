@@ -97,7 +97,7 @@
     lineinfile:
       path: "{{ item }}"
       backrefs: yes
-      regexp: "^(.*)turn:example.com:443?transport=tcp(.*)$"
+      regexp: "^(.*)turn:example.com:443\\?transport=tcp(.*)$"
       line: '\1{{ turn_uri }}\2'
     with_items:
       - mm/configs/app/config.js
@@ -118,7 +118,7 @@
       path: "{{ item }}"
       backrefs: yes
       regexp: "^(.*credential.*)example(.*)$"
-      line: '\1{{ turn_user }}\2'
+      line: '\1{{ turn_password }}\2'
     with_items:
       - mm/configs/app/config.js
       - mm/configs/server/config.js
