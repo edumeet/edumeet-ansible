@@ -129,6 +129,16 @@
     args:
       chdir: "/home/{{ ansible_user }}/mm"
       executable: /bin/bash
+  
+  - name: Add cert renew hook.
+    lineinfile:
+      path: "/etc/letsencrypt/renewal/{{ ansible_fqdn }}.conf"
+      line: '{{ item }}'
+      insertafter: '^\[renewalparams\
+      ]$'
+    with_items:
+      - "pre_hook = systemctl stop docker"
+      - "post_hook = systemctl start docker"
 
   handlers:
   - name: restart ferm
