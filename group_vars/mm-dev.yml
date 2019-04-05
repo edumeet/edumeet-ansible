@@ -1,0 +1,11 @@
+main_domain: lab.vvc.niif.hu
+cert_domains:
+  - mm-dev.lab.vvc.niif.hu
+  - rtc-dev.lab.vvc.niif.hu
+  - terefere-dev.lab.vvc.niif.hu
+cert_email: meszaros.mihaly@kifu.gov.hu
+unattended_email: meszaros.mihaly@kifu.gov.hu
+mm_branch: dev
+turn_uri: turn:ltc.turn.geant.org:443?transport=tcp
+turn_user: user
+turn_password: password
