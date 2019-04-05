@@ -141,13 +141,12 @@
   - name: Add cert renew hook.
     lineinfile:
       path: "/etc/letsencrypt/renewal/{{ ansible_fqdn }}.conf"      
-      line: '{{ item }}'
-      insertafter: '^\[renewalparams\]$'
-      backup: yes
-      backrefs: yes
+      line: '{{ item.line }}'
+      regexp: '{{ item.regexp }}'
+      insertafter: EOF      
     with_items:
-      - "pre_hook = systemctl stop docker"
-      - "post_hook = systemctl start docker"
+      - { line: "pre_hook = systemctl stop docker",   regexp: "^pre_hook.*$"  }
+      - { line: "post_hook = systemctl start docker", regexp: "^post_hook.*$" }
 
   handlers:
   - name: restart ferm
