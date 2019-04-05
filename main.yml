@@ -82,6 +82,7 @@
     git:
       repo: 'https://github.com/misi/mm.git'
       dest: /home/debian/mm
+      version: "{{ mm_branch }}"
 
   - name: Copy certs
     become: yes
