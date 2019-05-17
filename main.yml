@@ -86,6 +86,9 @@
       dest: /home/debian/mm
       version: "{{ mm_branch }}"
 
+# Customize Config
+
+# Certs
   - name: Copy certs
     become: yes
     copy:
@@ -96,11 +99,20 @@
       - cert.pem
       - privkey.pem
 
+# Logo
   - name: copy logo
     copy:
       src: logo.svg
-      dest: mm/logo/logo.svg
+      dest: mm/images/logo.svg
 
+  - name: Setup logo
+    lineinfile:
+      path: "mm/configs/app/config.js"
+      backrefs: yes
+      regexp: "^(.*)// (logo.*)$"
+      line: '\1\2'
+
+# TURN
   - name: Setup turnserver uri
     lineinfile:
       path: "{{ item }}"
@@ -131,6 +143,44 @@
       - mm/configs/app/config.js
       - mm/configs/server/config.js
 
+# Enable login
+  - name: Enable login
+    lineinfile:
+      path: "mm/configs/{{ item.cfg }}/config.js"
+      backrefs: yes
+      regexp: "^(.*{{ item.name }}.*: )(.*)$"
+      line: '\1 {{ item.value }},'
+    with_items:
+      - { name : "loginEnabled",  value: "true", cfg: "app" }
+      - { name : "issuerURL",  value: "'{{ issuer_url }}'", cfg: "server"  }
+      - { name : "client_id",  value: "'{{ client_id }}'", cfg: "server"  }
+      - { name : "client_secret",  value: "'{{ client_secret }}'", cfg: "server"  }
+      - { name : "redirect_uri",  value: "'{{ redirect_uri }}'", cfg: "server"  }
+    when:
+      login_enabled == true
+
+# Setup Cookie Secret
+  - name: Setup Cookie Secret
+    lineinfile:
+      path: "mm/configs/server/config.js"
+      backrefs: yes
+      regexp: "^(.*cookieSecret.*: )(.*)$"
+      line: '\1  "{{ cookie_secret }}" ,'
+
+# pull lastest image
+  - name: install python-docker package
+    become: yes
+    apt:
+      name: "python-docker"
+      state: latest
+
+  - name: pull docker image mm:dev
+    docker_image:
+      name: misi/mm
+      tag: dev
+      force: yes
+
+# Run container
   - name: Run mm container
     become: yes
     shell: ./run.sh
