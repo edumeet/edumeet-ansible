@@ -1,7 +1,5 @@
 ---
-- hosts: 
-    - mm
-    - mm-dev
+- hosts: all
   roles:
   - role: jnv.unattended-upgrades
     become: yes
