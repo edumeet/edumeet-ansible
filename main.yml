@@ -78,7 +78,7 @@
     shell: "docker rm -f mm"
     ignore_errors: yes
 
-  - name: git clone mm
+  - name: "git clone mm branch {{ mm_branch }}"
     git:
       repo: 'https://github.com/misi/mm.git'
       dest: /home/debian/mm
