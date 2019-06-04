@@ -172,10 +172,10 @@
       name: "python-docker"
       state: latest
 
-  - name: pull docker image mm:dev
+  - name: "pull docker image mm:{{mm_tag}}"
     docker_image:
       name: misi/mm
-      tag: dev
+      tag: "{{mm_tag}}"
       force: yes
 
 # Run container
