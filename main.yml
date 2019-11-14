@@ -110,6 +110,13 @@
       regexp: "^(.*)// (logo.*)$"
       line: '\1\2'
 
+  - name: Setup fqdn
+    lineinfile:
+      path: "mm/configs/app/config.js"
+      backrefs: yes
+      regexp: "^(.*multipartyServer : ')fqdn(',)$"
+      line: '\1{{ ansible_fqdn }}\2'
+
 # TURN
   - name: Setup turnserver uri
     lineinfile:
