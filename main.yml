@@ -23,6 +23,8 @@
     certbot_create_standalone_stop_services: ntp
     certbot_certs:
      - domains: "{{ cert_domains }}"
+  - role: andrewrothstein.docker-compose
+
   tasks:
   - name: Replace domain
     lineinfile:
@@ -77,7 +79,10 @@
 
   - name: docker clean mm container
     become: yes
-    shell: "docker rm -f mm"
+    shell: "docker-compose down"
+    args:
+      chdir: "/home/{{ ansible_user }}/mm"
+      executable: /bin/bash
     ignore_errors: yes
 
   - name: "git clone mm branch {{ mm_branch }}"
@@ -188,7 +193,7 @@
 # Run container
   - name: Run mm container
     become: yes
-    shell: ./run.sh
+    shell: docker compose up
     args:
       chdir: "/home/{{ ansible_user }}/mm"
       executable: /bin/bash

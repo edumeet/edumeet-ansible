@@ -1,3 +1,4 @@
 - src: jnv.unattended-upgrades
 - src: geerlingguy.docker
 - src: geerlingguy.certbot
+- src: andrewrothstein.docker-compose
