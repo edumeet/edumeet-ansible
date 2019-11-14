@@ -196,6 +196,15 @@
       - { line: "pre_hook = systemctl stop docker",   regexp: "^pre_hook.*$"  }
       - { line: "post_hook = systemctl start docker", regexp: "^post_hook.*$" }
 
+  - name: Add cert copy script to renew post hook
+    become: yes
+    template:
+      src: cert-renew.j2
+      dest: /etc/letsencrypt/renewal-hooks/post/mm.sh
+      owner: root
+      group: root
+      mode: 0755
+
   handlers:
   - name: restart ferm
     service:
