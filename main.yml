@@ -1,5 +1,7 @@
 ---
 - hosts: all
+  vars:
+    certfiles: [{src: 'fullchain.pem', dst: 'cert.pem'},{src: 'privkey.pem', dst: 'privkey.pem'}]
   roles:
   - role: jnv.unattended-upgrades
     become: yes
@@ -90,12 +92,10 @@
   - name: Copy certs
     become: yes
     copy:
-      src: "/etc/letsencrypt/live/{{ ansible_fqdn }}/{{ item }}"
-      dest: "mm/certs/{{ item }}"
+      src: "/etc/letsencrypt/live/{{ ansible_fqdn }}/{{ item.src }}"
+      dest: "mm/certs/{{ item.dst }}"
       remote_src: yes      
-    with_items:
-      - cert.pem
-      - privkey.pem
+    with_items: "{{ certfiles }}"
 
 # Logo
   - name: copy logo
