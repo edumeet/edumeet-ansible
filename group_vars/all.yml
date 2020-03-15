@@ -21,6 +21,8 @@ turn_password: turn_password
 # session cookie secret
 cookie_secret: secret-cookie
 
+#Page head short title
+title: "Multiparty Meeting"
 #############################################
 
 
