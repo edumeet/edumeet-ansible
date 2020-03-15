@@ -27,14 +27,14 @@ module.exports = {
   // oAuth2 conf  
   auth :
   {    
-    {% if lti_enabled == 'true' %}
+{% if lti_enabled == 'true' %}
     lti :
     {
       consumerKey    : '{{ lti_consumerKey }}',
       consumerSecret : '{{ lti_consumerSecret }}'
     },
-    {% endif %}
-    {% if login_enabled == 'true' %}
+{% endif %}
+{% if login_enabled == 'true' %}
     oidc:
     {
       // The issuer URL for OpenID Connect discovery
@@ -52,7 +52,7 @@ module.exports = {
         redirect_uri  :  '{{ redirect_uri }}',
       }
     }
-    {% endif %}
+{% endif %}
   },
   // session cookie secret
   cookieSecret:   "{{ cookie_secret }}" ,
@@ -66,6 +66,10 @@ module.exports = {
   // Any http request is redirected to https.
   // Listening port for http server.
   listeningRedirectPort: 80,
+  // Listens only on http, only on listeningPort
+  // listeningRedirectPort disabled
+  // use case: loadbalancer backend
+  httpOnly: false,
   // If this is set to true, only signed-in users will be able
   // to join a room directly. Non-signed-in users (guests) will
   // always be put in the lobby regardless of room lock status.

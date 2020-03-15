@@ -1,7 +1,7 @@
 - name: install packages
   become: yes
   apt:
-    name: ['ntp']
+    name: ['python3-apt', 'ntp']
     state: latest
     update_cache: yes
 
