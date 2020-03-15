@@ -1,0 +1,29 @@
+- name: install packages
+  become: yes
+  apt:
+    name: ['ntp']
+    state: latest
+    update_cache: yes
+
+- name: Add fdqn to hosts
+  become: yes
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^(127.0.1.1)(.*)$'
+    line: '\1 {{ fqdn_host }}.{{ fqdn_domain}} {{ fqdn_host }}'
+    backrefs: yes
+
+# reload domain to ansible var
+- name: Setup reload domain var to ansible var
+  setup:
+
+
+- name: iptables revert to legacy on Debian 10+ and later
+  become: true
+  alternatives: 
+    name: "{{ item.name }}"
+    path: "{{ item.path }}"
+  with_items:
+    - { name: iptables, path: /usr/sbin/iptables-legacy }
+    - { name: ip6tables, path: /usr/sbin/ip6tables-legacy }
+  when: ansible_distribution == "Debian" and ansible_distribution_major_version|int >= 10

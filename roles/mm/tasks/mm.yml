@@ -1,0 +1,131 @@
+---
+- name: Upgrade all packages to the latest version
+  become: yes
+  apt:
+    name: "*"
+    state: latest
+
+- name: Remove useless packages from the cache
+  become: yes
+  apt:
+    autoclean: yes
+
+- name: Remove dependencies that are no longer required
+  become: yes
+  apt:
+    autoremove: yes
+
+- name: install packages
+  become: yes
+  apt:
+    name: ['git', 'vim', 'ferm', 'fail2ban','ntp']
+    state: latest
+    update_cache: yes
+
+- name: ferm config
+  become: yes
+  copy:
+    src: ferm.conf
+    dest: /etc/ferm/ferm.conf
+  notify:
+  - restart ferm
+  - restart docker
+
+- meta: flush_handlers
+
+- name: install python-docker package
+  become: yes
+  apt:
+    name: ["python3-docker", "python3-pip"]
+    state: latest
+
+- name: install python-docker package
+  become: yes
+  pip:
+    name: "docker-compose"
+
+- name: check if mm dir exists
+  stat:
+    path: ./mm
+  register: mm_dir
+
+- name: Tear down existing services
+  become: yes
+  docker_compose:
+    project_src: mm
+    state: absent
+  when: mm_dir.stat.exists and mm_dir.stat.isdir
+
+- name: cleanup mm directory
+  become: yes
+  file:
+    state: absent
+    path: "mm"
+  when: mm_dir.stat.exists and mm_dir.stat.isdir
+
+- name: "git clone mm branch {{ mm_branch }}"
+  git:
+    repo: 'https://github.com/misi/mm.git'
+    dest: "/home/{{ ansible_user }}/mm"
+    version: "{{ mm_branch }}"
+
+# Customize Config
+
+# Certs
+- name: Copy certs
+  become: yes
+  copy:
+    src: "/etc/letsencrypt/live/{{ ansible_fqdn }}/{{ item.src }}"
+    dest: "/home/{{ ansible_user }}/mm/certs/{{ item.dst }}"
+    remote_src: yes      
+  with_items: "{{ certfiles }}"
+
+# Logo
+- name: copy logo
+  copy:
+    src: logo.svg
+    dest: mm/images/logo.svg
+
+- name: App Config
+  become: yes
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dst }}"
+    owner: root
+    group: root
+    mode: 0640
+    force: yes
+  with_items:
+    - { src: "app-config.j2", dst: "/home/{{ ansible_user }}/mm/configs/app/config.js" }
+    - { src: "server-config.j2", dst: "/home/{{ ansible_user }}/mm/configs/server/config.js" }
+
+
+# pull lastest image
+- name: "pull docker image mm:{{mm_tag}}"
+  become: yes
+  docker_image:
+    name: misi/mm
+    tag: "{{mm_tag}}"
+    source: pull
+    force_source: yes
+
+# Run container
+- name: Create and start services
+  become: yes
+  docker_compose:
+    project_src: mm
+  register: output
+
+#- debug:
+#    var: output
+
+- name: Add cert copy script to renew post hook
+  become: yes
+  template:
+    src: cert-renew.j2
+    dest: /etc/letsencrypt/renewal-hooks/post/mm.sh
+    owner: root
+    group: root
+    mode: 0755
+
+

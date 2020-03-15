@@ -1,0 +1,30 @@
+---
+- hosts: all
+  vars:
+    certfiles: [{src: 'fullchain.pem', dst: 'cert.pem'},{src: 'privkey.pem', dst: 'privkey.pem'}]
+    ansible_python_interpreter: /usr/bin/python3
+  roles:
+  - role: pre
+  - role: jnv.unattended-upgrades
+    become: yes
+    unattended_origins_patterns:
+    - 'origin=Debian,codename=${distro_codename},label=Debian-Security' # security updates
+    - 'o=Debian,codename=${distro_codename},label=Debian' # updates including non-security updates
+    - 'o=Debian,codename=${distro_codename},a=proposed-updates'
+
+  - role: geerlingguy.docker
+    become: yes
+    docker_install_compose: true
+
+  - role: geerlingguy.certbot
+    become: yes
+    certbot_create_if_missing: true
+    certbot_create_method: standalone
+    certbot_admin_email: "{{ cert_email }}"
+    # the role is dummy and needs anyway a service to stop, so I choosed: "ntp"
+    certbot_create_standalone_stop_services: ntp
+    certbot_certs:
+     - domains: "{{ cert_domains }}"
+
+  - role: mm
+

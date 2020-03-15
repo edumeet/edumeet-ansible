@@ -1,24 +1,42 @@
 
-# Ansible for mm install
+# Ansible for multipartymeeting/mm install
 
 Basic ansible script to instal Multiparty-Meeting in docker based on an openstack base debian image.
 
-## Edit group_var/mm.yml
+### Requirments
+You need to have:
+* debian/ubuntu base image installed
+* global IPv4 address
+* dns A record for the ipv4 address
+* setup ssh server with sudo
 
-Go to https://turn.geant.org get a turn password credential, and edit file var/mm.yml accordingly.
+## Prepare for install, config
 
-### Login Open ID Connect
-In config if you want to use OIDC auth, then please set login to true,
-otherwise you can safely skip this login config section.
+#### Configure vars (dns and ipv4 email turn, etc)
+Edit hosts to set ip 
+Edit group_vars/mm.yml
 
-## Install ansible roles
+##### TURN
+
+If you are working for the Education or Research community, 
+then please visit to https://turn.geant.org
+ to get a turn password credential,
+ and edit file group_vars/mm.yml accordingly.
+Otherwise install and configure a turn server (e.g. https://coturn.net)
+
+#### Advanced options
+For more advanced options see group_vars/all.yml
+
+## Install
+
+### Install ansible external roles
 
 ```bash
 ansible-galaxy install -r requirements.yml
 ```
 
-## Run setup playbook
+### Run setup playbook
 
 ```bash
-ansible-playbook -i hosts -b -u debian main.yml
+ansible-playbook -i hosts -b -u debian playbook.yml
 ```

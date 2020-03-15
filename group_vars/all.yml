@@ -1,0 +1,50 @@
+################ BASE CONFIG ################
+
+# branch https://github.com/misi/mm
+mm_branch: dev
+# docker tag https://hub.docker.com/r/misi/mm/
+mm_tag: dev
+
+fqdn_host: meet
+fqdn_domain: example.com
+
+# let's encrypt
+cert_domains:
+  - "{{ fqdn_host }}.{{ fqdn_domain }}"
+cert_email: "user@example.com"
+
+# TURN
+turn_uri: "turn:turnserver.example.com:443?transport=tcp"
+turn_user: turn_user
+turn_password: turn_password
+
+# session cookie secret
+cookie_secret: secret-cookie
+
+#############################################
+
+
+# Login using OIDC
+login_enabled: 'false'
+# OIDC op should support discovery!
+issuer_url: "https://op.example.com"
+client_id: id
+client_secret: secret
+redirect_uri: "https://mm.example.com/auth/callback"
+
+# enable LTI 1.1 for Learning Management Systems like mooodle
+lti_enabled: 'false'
+lti_consumerKey: key
+lti_consumerSecret: secret
+
+# If this is set to true, only signed-in users will be able
+# to join a room directly. Non-signed-in users (guests) will
+# always be put in the lobby regardless of room lock status.
+# If false, there is no difference between guests and signed-in
+# users when joining.
+requireSignInToAccess: 'false'
+
+# This flag has no effect when requireSignInToAccess is false
+# When truthy, the room will be open to all users when the first
+# authenticated user has already joined the room.
+activateOnHostJoin: 'false'

@@ -1,0 +1,11 @@
+- name: "restart ferm"
+  become: yes
+  service:
+    name: ferm
+    state: restarted
+
+- name: "restart docker"
+  become: yes
+  service:
+    name: docker
+    state: restarted
