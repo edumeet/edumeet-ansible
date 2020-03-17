@@ -13,8 +13,9 @@ You need to have:
 ## Prepare for install, config
 
 #### Configure vars (dns and ipv4 email turn, etc)
-Edit hosts to set ip 
+Edit hosts to set host or hosts
 Edit group_vars/mm.yml
+Rename according your hosts, and Edit host_vars/meet.yml
 
 ##### TURN
 
@@ -38,5 +39,5 @@ ansible-galaxy install -r requirements.yml
 ### Run setup playbook
 
 ```bash
-ansible-playbook -i hosts -b -u debian playbook.yml
+ansible-playbook -i hosts -u debian playbook.yml
 ```

@@ -4,7 +4,6 @@ mm_branch: dev
 mm_tag: dev
 
 
-fqdn_host: meet
 fqdn_domain: example.com
 
 # let's encrypt
