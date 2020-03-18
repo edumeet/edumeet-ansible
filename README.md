@@ -3,6 +3,8 @@
 
 Basic ansible script to instal Multiparty-Meeting in docker based on an openstack base debian image.
 
+[![asciicast](https://asciinema.org/a/311365.svg)](https://asciinema.org/a/311365)
+
 ### Requirments
 You need to have:
 * debian/ubuntu base image installed
