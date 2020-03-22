@@ -39,6 +39,11 @@
     name: ["python3-docker", "python3-pip"]
     state: latest
 
+- name: install python-setuptools package
+  become: yes
+  pip:
+    name: "setuptools"
+
 - name: install python-docker package
   become: yes
   pip:
@@ -46,13 +51,13 @@
 
 - name: check if mm dir exists
   stat:
-    path: ./mm
+    path: "/home/{{ ansible_user }}/mm"
   register: mm_dir
 
 - name: Tear down existing services
   become: yes
   docker_compose:
-    project_src: mm
+    project_src: "/home/{{ ansible_user }}/mm"
     state: absent
   when: mm_dir.stat.exists and mm_dir.stat.isdir
 
@@ -62,6 +67,11 @@
     state: absent
     path: "mm"
   when: mm_dir.stat.exists and mm_dir.stat.isdir
+
+- name: create directory (if root)
+  file:
+    path: "/home/{{ ansible_user }}/"
+    state: directory
 
 - name: "git clone mm branch {{ mm_branch }}"
   git:
@@ -84,7 +94,7 @@
 - name: copy logo
   copy:
     src: logo.svg
-    dest: mm/images/logo.svg
+    dest: "/home/{{ ansible_user }}/mm/images/logo.svg"
 
 - name: App Config
   become: yes
@@ -113,7 +123,7 @@
 - name: Create and start services
   become: yes
   docker_compose:
-    project_src: mm
+    project_src: "/home/{{ ansible_user }}/mm"
   register: output
 
 #- debug:
