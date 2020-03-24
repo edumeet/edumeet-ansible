@@ -31,7 +31,8 @@
   - restart ferm
   - restart docker
 
-- meta: flush_handlers
+- name: reload meta
+  meta: flush_handlers
 
 - name: install python-docker package
   become: yes
@@ -49,34 +50,44 @@
   pip:
     name: "docker-compose"
 
-- name: check if mm dir exists
+- name: check if an old deployment directory exists
   stat:
-    path: "/home/{{ ansible_user }}/mm"
-  register: mm_dir
+    path: "{{ deployment_directory}}"
+  register: oldmm_dir
 
-- name: Tear down existing services
+- name: tear down existing services
   become: yes
   docker_compose:
-    project_src: "/home/{{ ansible_user }}/mm"
+    project_src: "{{ deployment_directory}}"
     state: absent
-  when: mm_dir.stat.exists and mm_dir.stat.isdir
+  when: oldmm_dir.stat.exists and oldmm_dir.stat.isdir
+  ignore_errors: yes
 
-- name: cleanup mm directory
+- name: "cleanup: copy old directory to .old"
+  become: yes
+  copy:
+    dest: "{{ deployment_directory }}.old"  
+    src: "{{ deployment_directory }}"
+    remote_src: yes
+  when: oldmm_dir.stat.exists and oldmm_dir.stat.isdir
+
+- name: "cleanup: delete old deployment directory"
   become: yes
   file:
     state: absent
-    path: "mm"
-  when: mm_dir.stat.exists and mm_dir.stat.isdir
+    path: "{{ deployment_directory }}"
+  when: oldmm_dir.stat.exists and oldmm_dir.stat.isdir
 
-- name: create directory (if root)
+- name: make sure user home directory exists
+  become: yes
   file:
-    path: "/home/{{ ansible_user }}/"
+    path: "/home/{{ ansible_user }}"
     state: directory
 
 - name: "git clone mm branch {{ mm_branch }}"
   git:
     repo: 'https://github.com/misi/mm.git'
-    dest: "/home/{{ ansible_user }}/mm"
+    dest: "{{ deployment_directory }}"
     version: "{{ mm_branch }}"
 
 # Customize Config
@@ -86,7 +97,7 @@
   become: yes
   copy:
     src: "/etc/letsencrypt/live/{{ ansible_fqdn }}/{{ item.src }}"
-    dest: "/home/{{ ansible_user }}/mm/certs/{{ item.dst }}"
+    dest: "{{ deployment_directory}}/certs/{{ item.dst }}"
     remote_src: yes      
   with_items: "{{ certfiles }}"
 
@@ -94,7 +105,7 @@
 - name: copy logo
   copy:
     src: logo.svg
-    dest: "/home/{{ ansible_user }}/mm/images/logo.svg"
+    dest: "{{ deployment_directory}}/images/logo.svg"
 
 - name: App Config
   become: yes
@@ -106,8 +117,8 @@
     mode: 0640
     force: yes
   with_items:
-    - { src: "app-config.j2", dst: "/home/{{ ansible_user }}/mm/configs/app/config.js" }
-    - { src: "server-config.j2", dst: "/home/{{ ansible_user }}/mm/configs/server/config.js" }
+    - { src: "app-config.j2", dst: "{{ deployment_directory}}/configs/app/config.js" }
+    - { src: "server-config.j2", dst: "{{ deployment_directory}}/configs/server/config.js" }
 
 
 # pull lastest image
@@ -123,7 +134,7 @@
 - name: Create and start services
   become: yes
   docker_compose:
-    project_src: "/home/{{ ansible_user }}/mm"
+    project_src: "{{ deployment_directory}}"
   register: output
 
 #- debug:

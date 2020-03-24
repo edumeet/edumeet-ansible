@@ -1,7 +1,7 @@
 # branch https://github.com/misi/mm
-mm_branch: dev
+mm_branch: master
 # docker tag https://hub.docker.com/r/misi/mm/
-mm_tag: dev
+mm_tag: latest
 
 
 fqdn_domain: example.com

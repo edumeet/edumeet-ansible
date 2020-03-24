@@ -5,6 +5,10 @@
     state: latest
     update_cache: yes
 
+- name: display configured host and domain 
+  debug:
+    msg: host {{ fqdn_host }} and domain {{ fqdn_domain }}
+
 - name: Add fdqn to hosts
   become: yes
   lineinfile:

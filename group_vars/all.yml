@@ -1,4 +1,5 @@
-################ BASE CONFIG ################
+################ Default config for all hosts ################
+deployment_directory: "/home/{{ ansible_user }}/mm"
 
 # branch https://github.com/misi/mm
 mm_branch: master
