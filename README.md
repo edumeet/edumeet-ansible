@@ -1,4 +1,16 @@
 
+# News!!
+We moved! 
+* from `dev` docker tag to `latest` stable tag! 
+* from misi/mm `dev` branch to `master`
+
+In `dev` brach in the future it could happen that configs will be refactored, 
+and this way may break your service if you auto update them!
+Please move your system to stable version. 
+e.g. docker `latest` tag and misi/mm `master` branch.
+
+Save your existing configs first before you checkout any code!
+
 # Ansible for multipartymeeting/mm install
 
 Basic ansible script to instal Multiparty-Meeting in docker based on an openstack base debian image.
