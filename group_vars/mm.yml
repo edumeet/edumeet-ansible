@@ -3,6 +3,10 @@ mm_branch: master
 # docker tag https://hub.docker.com/r/misi/mm/
 mm_tag: latest
 
+# use the appropriate config templete
+# set it to multiparty-meeting version
+# or dev for develop
+config_template_version: 3.2.1
 
 fqdn_domain: example.com
 
@@ -16,9 +20,14 @@ turn_uri: turn:ltc.turn.geant.org:443?transport=tcp
 turn_user: user
 turn_password: password
 
+# Introduced in version: 3.3.0
+# If you part of the NREN community then
+# goto https://turn.geant.org to get your api key.
+turn_api_uri: "https://api.turn.geant.org/turn"
+turn_api_key: ""
+
 # session cookie secret
 cookie_secret: secret-cookie
 
 
 #See for more options and defaults in all.yml
-

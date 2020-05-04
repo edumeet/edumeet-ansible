@@ -18,7 +18,7 @@
 - name: install packages
   become: yes
   apt:
-    name: ['git', 'vim', 'ferm', 'fail2ban','ntp']
+    name: ['git', 'vim', 'ferm', 'fail2ban', 'ntp']
     state: latest
     update_cache: yes
 
@@ -117,8 +117,8 @@
     mode: 0640
     force: yes
   with_items:
-    - { src: "app-config.j2", dst: "{{ deployment_directory}}/configs/app/config.js" }
-    - { src: "server-config.j2", dst: "{{ deployment_directory}}/configs/server/config.js" }
+    - { src: "{{ config_template_version }}/app-config.j2", dst: "{{ deployment_directory}}/configs/app/config.js" }
+    - { src: "{{ config_template_version }}/server-config.j2", dst: "{{ deployment_directory}}/configs/server/config.js" }
 
 
 # pull lastest image
