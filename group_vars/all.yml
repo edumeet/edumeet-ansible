@@ -65,3 +65,6 @@ requireSignInToAccess: 'false'
 # When truthy, the room will be open to all users when the first
 # authenticated user has already joined the room.
 activateOnHostJoin: 'false'
+
+# by default we use letsencrypt, set it true to enable local cert
+local_cert: false

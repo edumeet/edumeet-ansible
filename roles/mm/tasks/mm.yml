@@ -92,14 +92,24 @@
 
 # Customize Config
 
-# Certs
-- name: Copy certs
+# Cert
+- name: Copy letsencrypt cert
   become: yes
   copy:
     src: "/etc/letsencrypt/live/{{ ansible_fqdn }}/{{ item.src }}"
     dest: "{{ deployment_directory}}/certs/{{ item.dst }}"
-    remote_src: yes      
+    remote_src: yes
   with_items: "{{ certfiles }}"
+  when: local_cert != true
+
+- name: Copy local cert
+  become: yes
+  copy:
+    src: "/etc/letsencrypt/live/{{ ansible_fqdn }}/{{ item.src }}"
+    dest: "{{ deployment_directory}}/certs/{{ item.dst }}"
+    remote_src: yes
+  with_items: "{{ certfiles }}"
+  when: local_cert == true
 
 # Logo
 - name: copy logo
@@ -148,5 +158,5 @@
     owner: root
     group: root
     mode: 0755
-
+  when: local_cert != true
 

@@ -25,6 +25,8 @@
     certbot_create_standalone_stop_services: ntp
     certbot_certs:
      - domains: "{{ cert_domains }}"
+    when: 
+      local_cert != true 
 
   - role: mm
 

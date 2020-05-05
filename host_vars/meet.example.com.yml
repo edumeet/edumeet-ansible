@@ -1,1 +1,7 @@
 fqdn_host: meet
+
+# by default we use letsencrypt and so local_cert is flase
+# set it true to enable local cert usage
+#local_cert: true 
+# also modify certifiacates src accoriding your local cert location
+#certfiles: [{src: '/tmp/cert.pem', dst: 'cert.pem'},{src: '/tmp/privkey.pem', dst: 'privkey.pem'}]
