@@ -105,10 +105,10 @@
 - name: Copy local cert
   become: true
   copy:
-    src: "/etc/letsencrypt/live/{{ ansible_fqdn }}/{{ item.src }}"
+    src: "{{ item.src }}"
     dest: "{{ deployment_directory}}/certs/{{ item.dst }}"
     remote_src: true
-  with_items: "{{ certfiles }}"
+  with_items: "{{ local_certfiles }}"
   when: local_cert == true
 
 # Logo
