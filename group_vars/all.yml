@@ -1,3 +1,4 @@
+---
 ################ Default config for all hosts ################
 deployment_directory: "/home/{{ ansible_user }}/mm"
 
@@ -33,7 +34,7 @@ turn_api_key: ""
 # session cookie secret
 cookie_secret: secret-cookie
 
-#Page head short title
+# Page head short title
 title: "Multiparty Meeting"
 #############################################
 

@@ -1,3 +1,4 @@
+---
 fqdn_host: meet
 
 # by default we use letsencrypt and so local_cert is flase

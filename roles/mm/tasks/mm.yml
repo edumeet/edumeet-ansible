@@ -1,52 +1,52 @@
 ---
 - name: Upgrade all packages to the latest version
-  become: yes
+  become: true
   apt:
     name: "*"
     state: latest
 
 - name: Remove useless packages from the cache
-  become: yes
+  become: true
   apt:
-    autoclean: yes
+    autoclean: true
 
 - name: Remove dependencies that are no longer required
-  become: yes
+  become: true
   apt:
-    autoremove: yes
+    autoremove: true
 
 - name: install packages
-  become: yes
+  become: true
   apt:
     name: ['git', 'vim', 'ferm', 'fail2ban', 'ntp']
     state: latest
-    update_cache: yes
+    update_cache: true
 
 - name: ferm config
-  become: yes
+  become: true
   copy:
     src: ferm.conf
     dest: /etc/ferm/ferm.conf
   notify:
-  - restart ferm
-  - restart docker
+    - restart ferm
+    - restart docker
 
 - name: reload meta
   meta: flush_handlers
 
 - name: install python-docker package
-  become: yes
+  become: true
   apt:
     name: ["python3-docker", "python3-pip"]
     state: latest
 
 - name: install python-setuptools package
-  become: yes
+  become: true
   pip:
     name: "setuptools"
 
 - name: install python-docker package
-  become: yes
+  become: true
   pip:
     name: "docker-compose"
 
@@ -56,30 +56,30 @@
   register: oldmm_dir
 
 - name: tear down existing services
-  become: yes
+  become: true
   docker_compose:
     project_src: "{{ deployment_directory}}"
     state: absent
   when: oldmm_dir.stat.exists and oldmm_dir.stat.isdir
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: "cleanup: copy old directory to .old"
-  become: yes
+  become: true
   copy:
-    dest: "{{ deployment_directory }}.old"  
+    dest: "{{ deployment_directory }}.old"
     src: "{{ deployment_directory }}"
-    remote_src: yes
+    remote_src: true
   when: oldmm_dir.stat.exists and oldmm_dir.stat.isdir
 
 - name: "cleanup: delete old deployment directory"
-  become: yes
+  become: true
   file:
     state: absent
     path: "{{ deployment_directory }}"
   when: oldmm_dir.stat.exists and oldmm_dir.stat.isdir
 
 - name: make sure user home directory exists
-  become: yes
+  become: true
   file:
     path: "/home/{{ ansible_user }}"
     state: directory
@@ -94,20 +94,20 @@
 
 # Cert
 - name: Copy letsencrypt cert
-  become: yes
+  become: true
   copy:
     src: "/etc/letsencrypt/live/{{ ansible_fqdn }}/{{ item.src }}"
     dest: "{{ deployment_directory}}/certs/{{ item.dst }}"
-    remote_src: yes
+    remote_src: true
   with_items: "{{ certfiles }}"
   when: local_cert != true
 
 - name: Copy local cert
-  become: yes
+  become: true
   copy:
     src: "/etc/letsencrypt/live/{{ ansible_fqdn }}/{{ item.src }}"
     dest: "{{ deployment_directory}}/certs/{{ item.dst }}"
-    remote_src: yes
+    remote_src: true
   with_items: "{{ certfiles }}"
   when: local_cert == true
 
@@ -118,40 +118,45 @@
     dest: "{{ deployment_directory}}/images/logo.svg"
 
 - name: App Config
-  become: yes
+  become: true
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dst }}"
     owner: root
     group: root
     mode: 0640
-    force: yes
+    force: true
   with_items:
-    - { src: "{{ config_template_version }}/app-config.j2", dst: "{{ deployment_directory}}/configs/app/config.js" }
-    - { src: "{{ config_template_version }}/server-config.j2", dst: "{{ deployment_directory}}/configs/server/config.js" }
-
+    - {
+      src: "{{ config_template_version }}/app-config.j2",
+      dst: "{{ deployment_directory }}/configs/app/config.js"
+    }
+    - {
+      src: "{{ config_template_version }}/server-config.j2",
+      dst: "{{ deployment_directory }}/configs/server/config.js"
+    }
 
 # pull lastest image
 - name: "pull docker image mm:{{mm_tag}}"
-  become: yes
+  become: true
   docker_image:
     name: misi/mm
     tag: "{{mm_tag}}"
     source: pull
-    force_source: yes
+    force_source: true
 
 # Run container
 - name: Create and start services
-  become: yes
+  become: true
   docker_compose:
     project_src: "{{ deployment_directory}}"
   register: output
 
-#- debug:
-#    var: output
+# - debug:
+#     var: output
 
 - name: Add cert copy script to renew post hook
-  become: yes
+  become: true
   template:
     src: cert-renew.j2
     dest: /etc/letsencrypt/renewal-hooks/post/mm.sh
@@ -159,4 +164,3 @@
     group: root
     mode: 0755
   when: local_cert != true
-

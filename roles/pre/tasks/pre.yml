@@ -1,21 +1,22 @@
+---
 - name: install packages
-  become: yes
+  become: true
   apt:
     name: ['python3-apt', 'ntp']
     state: latest
-    update_cache: yes
+    update_cache: true
 
-- name: display configured host and domain 
+- name: display configured host and domain
   debug:
     msg: host {{ fqdn_host }} and domain {{ fqdn_domain }}
 
 - name: Add fdqn to hosts
-  become: yes
+  become: true
   lineinfile:
     path: /etc/hosts
     regexp: '^(127.0.1.1)(.*)$'
     line: '\1 {{ fqdn_host }}.{{ fqdn_domain}} {{ fqdn_host }}'
-    backrefs: yes
+    backrefs: true
 
 # reload domain to ansible var
 - name: Setup reload domain var to ansible var
@@ -24,10 +25,11 @@
 
 - name: iptables revert to legacy on Debian 10+ and later
   become: true
-  alternatives: 
+  alternatives:
     name: "{{ item.name }}"
     path: "{{ item.path }}"
   with_items:
-    - { name: iptables, path: /usr/sbin/iptables-legacy }
-    - { name: ip6tables, path: /usr/sbin/ip6tables-legacy }
-  when: ansible_distribution == "Debian" and ansible_distribution_major_version|int >= 10
+    - {name: iptables, path: /usr/sbin/iptables-legacy}
+    - {name: ip6tables, path: /usr/sbin/ip6tables-legacy}
+  when: ansible_distribution == "Debian"
+    and ansible_distribution_major_version|int >= 10

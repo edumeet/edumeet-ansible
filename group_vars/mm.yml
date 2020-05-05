@@ -1,3 +1,4 @@
+---
 # branch https://github.com/misi/mm
 mm_branch: master
 # docker tag https://hub.docker.com/r/misi/mm/
@@ -30,4 +31,4 @@ turn_api_key: ""
 cookie_secret: secret-cookie
 
 
-#See for more options and defaults in all.yml
+# See for more options and defaults in all.yml
