@@ -7,7 +7,7 @@ mm_tag: latest
 # use the appropriate config templete
 # set it to multiparty-meeting version
 # or dev for develop
-config_template_version: 3.2.1
+config_template_version: 3.3.0
 
 fqdn_domain: example.com
 
