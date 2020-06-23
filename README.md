@@ -1,12 +1,14 @@
 
-# Ansible for multipartymeeting/mm install
+# Ansible for edumeet/edumeet-docker install
 
-Basic ansible script to instal Multiparty-Meeting in docker based on an openstack base debian image.
+Basic ansible script to instal eduMeet in docker based on an openstack base debian image.
 
 [![asciicast](https://asciinema.org/a/311365.svg)](https://asciinema.org/a/311365)
 
-### Requirments
+## Requirments
+
 You need to have:
+
 * debian/ubuntu base image installed
 * global IPv4 address
 * dns A record for the ipv4 address
@@ -14,20 +16,22 @@ You need to have:
 
 ## Prepare for install, config
 
-#### Configure vars (dns and ipv4 email turn, etc)
+### Configure vars (dns and ipv4 email turn, etc)
+
 Edit hosts to set host or hosts
 Edit group_vars/mm.yml
 Rename according your hosts, and Edit host_vars/meet.yml
 
-##### TURN
+#### TURN
 
-If you are working for the Education or Research community, 
-then please visit to https://turn.geant.org
+If you are working for the Education or Research community,
+then please visit to [https://turn.geant.org)](https://turn.geant.org)
  to get a turn password credential,
  and edit file group_vars/mm.yml accordingly.
-Otherwise install and configure a turn server (e.g. https://coturn.net)
+Otherwise install and configure a turn server (e.g. [https://coturn.net](https://coturn.net))
 
-#### Advanced options
+### Advanced options
+
 For more advanced options see group_vars/all.yml
 
 ## Install
