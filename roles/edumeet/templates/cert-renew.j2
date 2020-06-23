@@ -1,0 +1,7 @@
+#!/bin/bash
+{% for item in certfiles %}
+cp -b /etc/letsencrypt/live/{{ ansible_fqdn }}/{{ item.src }} {{ deployment_directory }}/certs/{{ item.dst }}
+{% endfor %}
+
+# Restart eduMeet to reload cert
+docker restart edumeet_edumeet_1

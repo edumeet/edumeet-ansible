@@ -1,8 +1,8 @@
 ---
-# branch https://github.com/misi/mm
-mm_branch: master
-# docker tag https://hub.docker.com/r/misi/mm/
-mm_tag: 3.3.0
+# branch https://github.com/edumeet/edumeet-docker
+edumeet_branch: master
+# docker tag https://hub.docker.com/r/edumeet/edumeet/
+edumeet_tag: 3.3.0
 
 # use the appropriate config templete
 # set it to multiparty-meeting version

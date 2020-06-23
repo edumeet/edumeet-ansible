@@ -1,11 +1,11 @@
 ---
 ################ Default config for all hosts ################
-deployment_directory: "/home/{{ ansible_user }}/mm"
+deployment_directory: "/home/{{ ansible_user }}/edumeet"
 
-# branch https://github.com/misi/mm
-mm_branch: master
-# docker tag https://hub.docker.com/r/misi/mm/
-mm_tag: latest
+# branch https://github.com/edumeet/edumeet-docker
+edumeet_branch: master
+# docker tag https://hub.docker.com/r/edumeet/edumeet/
+edumeet_tag: latest
 
 # use the appropriate config templete
 # set it to multiparty-meeting version
@@ -45,7 +45,7 @@ login_enabled: 'false'
 issuer_url: "https://op.example.com"
 client_id: id
 client_secret: secret
-redirect_uri: "https://mm.example.com/auth/callback"
+redirect_uri: "https://meet.example.com/auth/callback"
 
 # enable LTI 1.1 for Learning Management Systems like mooodle
 lti_enabled: 'false'

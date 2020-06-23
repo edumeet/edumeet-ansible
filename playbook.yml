@@ -34,4 +34,4 @@
       when:
         local_cert != true
 
-    - role: mm
+    - role: edumeet

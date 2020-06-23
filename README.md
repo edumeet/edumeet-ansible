@@ -19,7 +19,7 @@ You need to have:
 ### Configure vars (dns and ipv4 email turn, etc)
 
 Edit hosts to set host or hosts
-Edit group_vars/mm.yml
+Edit group_vars/edumeet.yml
 Rename according your hosts, and Edit host_vars/meet.yml
 
 #### TURN
@@ -27,7 +27,7 @@ Rename according your hosts, and Edit host_vars/meet.yml
 If you are working for the Education or Research community,
 then please visit to [https://turn.geant.org)](https://turn.geant.org)
  to get a turn password credential,
- and edit file group_vars/mm.yml accordingly.
+ and edit file group_vars/edumeet.yml accordingly.
 Otherwise install and configure a turn server (e.g. [https://coturn.net](https://coturn.net))
 
 ### Advanced options

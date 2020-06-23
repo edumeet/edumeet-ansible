@@ -53,14 +53,14 @@
 - name: check if an old deployment directory exists
   stat:
     path: "{{ deployment_directory}}"
-  register: oldmm_dir
+  register: oldedumeet_dir
 
 - name: tear down existing services
   become: true
   docker_compose:
     project_src: "{{ deployment_directory}}"
     state: absent
-  when: oldmm_dir.stat.exists and oldmm_dir.stat.isdir
+  when: oldedumeet_dir.stat.exists and oldedumeet_dir.stat.isdir
   ignore_errors: true
 
 - name: "cleanup: copy old directory to .old"
@@ -69,14 +69,14 @@
     dest: "{{ deployment_directory }}.old"
     src: "{{ deployment_directory }}"
     remote_src: true
-  when: oldmm_dir.stat.exists and oldmm_dir.stat.isdir
+  when: oldedumeet_dir.stat.exists and oldedumeet_dir.stat.isdir
 
 - name: "cleanup: delete old deployment directory"
   become: true
   file:
     state: absent
     path: "{{ deployment_directory }}"
-  when: oldmm_dir.stat.exists and oldmm_dir.stat.isdir
+  when: oldedumeet_dir.stat.exists and oldedumeet_dir.stat.isdir
 
 - name: make sure user home directory exists
   become: true
@@ -84,11 +84,11 @@
     path: "/home/{{ ansible_user }}"
     state: directory
 
-- name: "git clone mm branch {{ mm_branch }}"
+- name: "git clone edumeet branch {{ edumeet_branch }}"
   git:
-    repo: 'https://github.com/misi/mm.git'
+    repo: 'https://github.com/edumeet/edumeet-docker.git'
     dest: "{{ deployment_directory }}"
-    version: "{{ mm_branch }}"
+    version: "{{ edumeet_branch }}"
 
 # Customize Config
 
@@ -124,7 +124,7 @@
     dest: "{{ item.dst }}"
     owner: root
     group: root
-    mode: 0640
+    mode: "0640"
     force: true
   with_items:
     - {
@@ -137,11 +137,11 @@
     }
 
 # pull lastest image
-- name: "pull docker image mm:{{mm_tag}}"
+- name: "pull docker image edumeet/edumeet:{{edumeet_tag}}"
   become: true
   docker_image:
-    name: misi/mm
-    tag: "{{mm_tag}}"
+    name: edumeet/edumeet
+    tag: "{{edumeet_tag}}"
     source: pull
     force_source: true
 
@@ -159,8 +159,8 @@
   become: true
   template:
     src: cert-renew.j2
-    dest: /etc/letsencrypt/renewal-hooks/post/mm.sh
+    dest: /etc/letsencrypt/renewal-hooks/post/edumeet.sh
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
   when: local_cert != true

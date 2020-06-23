@@ -1,7 +1,0 @@
-#!/bin/bash
-{% for item in certfiles %}
-cp -b /etc/letsencrypt/live/{{ ansible_fqdn }}/{{ item.src }} {{ deployment_directory }}/mm/certs/{{ item.dst }}
-{% endfor %}
-
-# Restart mm to reload cert
-docker restart mm_mm_1
