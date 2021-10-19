@@ -1,0 +1,19 @@
+turnAPIKey: {{ turn_api_key }}
+turnAPIURI: {{ turn_api_uri }}
+backupTurnServers: [
+		{
+			urls: [
+				{{ turn_uri }}
+			]
+			username   : {{ turn_user }}
+			credential : {{ turn_password }}
+		}
+	]
+cookieSecret: {{ cookie_secret }}
+activateOnHostJoin: {{ activateOnHostJoin }}
+tls:
+  cert : /opt/edumeet/server/certs/cert.pem
+  key  : /opt/edumeet/server/certs/privkey.pem
+redisOptions:
+  host: 127.0.0.1
+  port: 6379

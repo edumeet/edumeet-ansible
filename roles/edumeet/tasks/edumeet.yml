@@ -128,13 +128,21 @@
     force: true
   with_items:
     - {
-      src: "{{ config_template_version }}/app-config.j2",
-      dst: "{{ deployment_directory }}/configs/app/config.js"
+      src: "{{ config_template_version }}/app-config.yaml.j2",
+      dst: "{{ deployment_directory }}/configs/app/config.yaml"
     }
     - {
-      src: "{{ config_template_version }}/server-config.j2",
+      src: "{{ config_template_version }}/server-config.js.j2",
       dst: "{{ deployment_directory }}/configs/server/config.js"
     }
+    - {
+      src: "{{ config_template_version }}/server-config.yaml.j2",
+      dst: "{{ deployment_directory }}/configs/server/config.yaml"
+    }
+
+- name: Run redis password genarator shell script
+  become: true
+  ansible.builtin.command: "{{ deployment_directory }}/gen-redis-password.sh"
 
 # pull lastest image
 - name: "pull docker image edumeet/edumeet:{{edumeet_tag}}"
