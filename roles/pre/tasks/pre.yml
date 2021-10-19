@@ -22,14 +22,16 @@
 - name: Setup reload domain var to ansible var
   setup:
 
-
-- name: iptables revert to legacy on Debian 10+ and later
-  become: true
-  alternatives:
-    name: "{{ item.name }}"
-    path: "{{ item.path }}"
-  with_items:
-    - {name: iptables, path: /usr/sbin/iptables-legacy}
-    - {name: ip6tables, path: /usr/sbin/ip6tables-legacy}
-  when: ansible_distribution == "Debian"
-    and ansible_distribution_major_version|int >= 10
+# Not sure if it is still needed.. 
+# TODO: clean it out later.
+#
+#- name: iptables revert to legacy on Debian 10+ and later
+#  become: true
+#  alternatives:
+#    name: "{{ item.name }}"
+#    path: "{{ item.path }}"
+#  with_items:
+#    - {name: iptables, path: /usr/sbin/iptables-legacy}
+#    - {name: ip6tables, path: /usr/sbin/ip6tables-legacy}
+#  when: ansible_distribution == "Debian"
+#    and ansible_distribution_major_version|int >= 10
