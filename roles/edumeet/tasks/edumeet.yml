@@ -128,8 +128,8 @@
     force: true
   with_items:
     - {
-      src: "{{ config_template_version }}/app-config.yaml.j2",
-      dst: "{{ deployment_directory }}/configs/app/config.yaml"
+      src: "{{ config_template_version }}/app-config.js.j2",
+      dst: "{{ deployment_directory }}/configs/app/config.js"
     }
     - {
       src: "{{ config_template_version }}/server-config.js.j2",
