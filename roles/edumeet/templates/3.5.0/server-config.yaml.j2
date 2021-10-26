@@ -1,14 +1,12 @@
 turnAPIKey: {{ turn_api_key }}
 turnAPIURI: {{ turn_api_uri }}
-backupTurnServers: [
-		{
-			urls: [
-				{{ turn_uri }}
-			]
-			username   : {{ turn_user }}
-			credential : {{ turn_password }}
-		}
-	]
+listeningPort: 443
+listeningRedirectPort: 80
+backupTurnServers:
+  - urls:
+    - {{ turn_uri }}
+    username   : {{ turn_user }}
+    credential : {{ turn_password }}
 cookieSecret: {{ cookie_secret }}
 activateOnHostJoin: {{ activateOnHostJoin }}
 tls:

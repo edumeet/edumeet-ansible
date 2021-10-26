@@ -1,6 +1,6 @@
 ---
 ################ Default config for all hosts ################
-deployment_directory: "/home/{{ ansible_user }}/edumeet"
+deployment_directory: "/home/{{ ansible_user_id }}/edumeet"
 
 # branch https://github.com/edumeet/edumeet-docker
 edumeet_branch: master

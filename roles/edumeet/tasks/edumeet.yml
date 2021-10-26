@@ -52,13 +52,13 @@
 
 - name: check if an old deployment directory exists
   stat:
-    path: "{{ deployment_directory}}"
+    path: "{{ deployment_directory }}"
   register: oldedumeet_dir
 
 - name: tear down existing services
   become: true
   docker_compose:
-    project_src: "{{ deployment_directory}}"
+    project_src: "{{ deployment_directory }}"
     state: absent
   when: oldedumeet_dir.stat.exists and oldedumeet_dir.stat.isdir
   ignore_errors: true
@@ -97,7 +97,7 @@
   become: true
   copy:
     src: "/etc/letsencrypt/live/{{ ansible_fqdn }}/{{ item.src }}"
-    dest: "{{ deployment_directory}}/certs/{{ item.dst }}"
+    dest: "{{ deployment_directory }}/certs/{{ item.dst }}"
     remote_src: true
   with_items: "{{ certfiles }}"
   when: local_cert != true
@@ -106,7 +106,7 @@
   become: true
   copy:
     src: "{{ item.src }}"
-    dest: "{{ deployment_directory}}/certs/{{ item.dst }}"
+    dest: "{{ deployment_directory }}/certs/{{ item.dst }}"
     remote_src: true
   with_items: "{{ local_certfiles }}"
   when: local_cert == true
@@ -115,7 +115,7 @@
 - name: copy logo
   copy:
     src: logo.svg
-    dest: "{{ deployment_directory}}/images/logo.svg"
+    dest: "{{ deployment_directory }}/images/logo.svg"
 
 - name: App Config
   become: true
@@ -139,11 +139,13 @@
       src: "{{ config_template_version }}/server-config.yaml.j2",
       dst: "{{ deployment_directory }}/configs/server/config.yaml"
     }
+  debugger: on_failed
 
 - name: Run redis password genarator shell script
   become: true
-  ansible.builtin.command: "{{ deployment_directory }}/gen-redis-password.sh"
-
+  shell: "{{ deployment_directory }}/gen-redis-password.sh"
+  args:
+    chdir: "{{ deployment_directory }}"
 # pull lastest image
 - name: "pull docker image edumeet/edumeet:{{edumeet_tag}}"
   become: true
