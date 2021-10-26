@@ -139,7 +139,6 @@
       src: "{{ config_template_version }}/server-config.yaml.j2",
       dst: "{{ deployment_directory }}/configs/server/config.yaml"
     }
-  debugger: on_failed
 
 - name: Run redis password genarator shell script
   become: true
