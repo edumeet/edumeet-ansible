@@ -2,7 +2,7 @@
 - name: install packages
   become: true
   apt:
-    name: ['python3-apt', 'ntp', 'build-essential', 'libpython3.7-dev', 'libffi-dev']
+    name: ['python3-apt', 'ntp', 'build-essential', 'libpython3-dev', 'libffi-dev']
     state: latest
     update_cache: true
 
