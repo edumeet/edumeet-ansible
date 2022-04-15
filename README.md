@@ -47,3 +47,6 @@ ansible-galaxy install -r requirements.yml
 ```bash
 ansible-playbook -i hosts -u debian playbook.yml
 ```
+
+### Warning
+This playbook uses ferm as firewall so it might break existing configurations with different firewalls on host (like ufw)!!!
