@@ -2,11 +2,7 @@ turnAPIKey: {{ turn_api_key }}
 turnAPIURI: {{ turn_api_uri }}
 listeningPort: 443
 listeningRedirectPort: 80
-backupTurnServers:
-  - urls:
-    - {{ turn_uri }}
-    username   : {{ turn_user }}
-    credential : {{ turn_password }}
+
 cookieSecret: {{ cookie_secret }}
 activateOnHostJoin: {{ activateOnHostJoin }}
 tls:
@@ -15,3 +11,4 @@ tls:
 redisOptions:
   host: 127.0.0.1
   port: 6379
+  password: "_REDIS_PASSWORD_"
