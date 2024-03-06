@@ -1,3 +1,5 @@
+# This is NOT working for latest edumeet (> v4.X) - only for edumeet 3.X !!!
+Help to make this working with latest edumeet is highly appreciated!
 
 # Ansible for edumeet/edumeet-docker install
 
